@@ -1,3 +1,3 @@
 # OOP-Assignment
 
-![Alt text](./screenshots/Capture.png "Interface")
+![Alt text](./screenshots/Start_Page.PNG "Start")
