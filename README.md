@@ -14,4 +14,4 @@ USER CASE UML
 
 
 CLASS DIAGRAM
-![Alt text](./screenshots/USERCASE.png "diagram")
+![Alt text](./class (1).png "diagram")
