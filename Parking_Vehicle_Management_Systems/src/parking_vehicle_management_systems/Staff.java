@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import static parking_vehicle_management_systems.Driver_Class.Vehicle_list;
+import static parking_vehicle_management_systems.Driver_Class.input;
 import static parking_vehicle_management_systems.Driver_Class.registered_Staff;
 
 public class Staff  extends Person{
@@ -15,6 +17,7 @@ public class Staff  extends Person{
     static ArrayList<Staff> loggedStaff = new ArrayList<>();
     public boolean has_Parking_bay;
     public String parking_space;
+    public Vehicle ownsCar;
     /* Arraylist will store the staff attributes of the staff those logged on*/
     
     //empty constructor
@@ -23,15 +26,16 @@ public class Staff  extends Person{
     }    
     
     //parametized constructor, username is auto generated
-    public Staff(String name, String surname, String password, boolean has_Parking_bay, String parking_space) {
+    public Staff(String name, String surname, String password, boolean has_Parking_bay, String parking_space, String Color, String plat_no, int Year, String Make, String Model) {
         super(name, surname);
         this.username = generate_username(this.name, this.surname);
+        this.ownsCar = new Vehicle(Color, plat_no, Year, Make, Model); //Composition Relationship
         this.password = password;
         this.has_Parking_bay = has_Parking_bay;
         this.parking_space = parking_space;
     }
 
-    public Staff(String username, String password) {
+    public Staff(String username, String password, String parking_space) {
         this.username = username;
         this.password = password;
         this.parking_space = parking_space;
@@ -80,7 +84,15 @@ public class Staff  extends Person{
     public void setParking_space(String parking_space) {
         this.parking_space = parking_space;
     }
-        
+
+    public Vehicle getOwnsCar() {
+        return ownsCar;
+    }
+
+    public void setOwnsCar(Vehicle ownsCar) {
+        this.ownsCar = ownsCar;
+    }
+       
     public boolean isValidStaff(){
         boolean isValid = false;
         for (int i = 0; i < registered_Staff.size(); i++){
@@ -91,7 +103,7 @@ public class Staff  extends Person{
         }
         return isValid; //Validating staff credentials through registered_Staff list
     }
-    
+        
     /*This method prompts the admin to enter the details of the new staff they ae about to create
       Receiving all staff credentials and double checking password entry*/
     public void receiveCredentials(){
@@ -158,21 +170,44 @@ public class Staff  extends Person{
                 break;
             }
         } //Checking whether new Staff credentials match with existing Staff
+        
+        
         if (!isStaffExist){
             registered_Staff.add(this);
             
-        File file = new File("staff_list.txt");
-        try (final FileWriter w = new FileWriter(file.getAbsoluteFile(),true);
-                final BufferedWriter buw = new BufferedWriter(w);
-                final PrintWriter out = new PrintWriter(buw)) {
-            if (!file.exists()) {
-                file.createNewFile();
+            File file = new File("staff_list.txt");
+            try (final FileWriter w = new FileWriter(file.getAbsoluteFile(),true);
+                    final BufferedWriter buw = new BufferedWriter(w);
+                    final PrintWriter out = new PrintWriter(buw)) {
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                int s = registered_Staff.size()-1;
+                out.println(registered_Staff.get(s).getName() + " " + registered_Staff.get(s).getSurname() + " " + registered_Staff.get(s).getUsername() + " " +registered_Staff.get(s).getPassword());
+
+            }catch (IOException e) {
+
             }
-            int s = registered_Staff.size()-1;
-            out.println(registered_Staff.get(s).getName() + " " + registered_Staff.get(s).getSurname() + " " + registered_Staff.get(s).getUsername() + " " +registered_Staff.get(s).getPassword());
             
-        }catch (IOException e) {
-        }
+            System.out.println("----------------- NEW YOUR VEHICLE DETAILS--------------------");
+            System.out.print("Enter Vehicle Color: ");
+            String Color = input.next();
+            System.out.print("Enter Plat Number ");
+            String plat_no = input.next();
+            System.out.print("Enter Year ");
+            int Year = input.nextInt();
+            System.out.print("Enter Make: ");
+            String Make = input.next();
+            System.out.print("Enter Model: ");
+            String Model = input.next();
+
+            //new parking has no car parked
+            Vehicle new_car = new Vehicle(Color, plat_no, Year, Make, Model);
+            
+            this.setOwnsCar(new_car);            
+            Vehicle_list.add(new_car);
+            System.out.println("--. SUCCESSFUL VEHICLE ADDITION -");
+            
             System.out.println((char)27 +"[33mNew Staff Account Successfully Created."+(char)27 +"[0m");
             System.out.println("_________________________________________________________________________________________________");
         } //Create new staff and add to staff's list if the staff does not exist
