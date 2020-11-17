@@ -4,5 +4,8 @@
 
 
 USER CASE UML
-
 ![Alt text](./screenshots/USERCASE.png "User Case UML")
+
+
+CLASS DIAGRAM
+![Alt text](./screenshots/USERCASE.png "diagram")
